@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="js/RegExpVaildate.js"></script>
+	<script src="js/simpleTips.js"></script>
+</head>
+<body>
+	<input type="text" name="text" id="input">
+	<button id="btn">提交</button>
+	<script>
+	simpleTips.alert('hehehehehehe哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈','我是标题');
+		let text = document.getElementById('input'),
+			btn = document.getElementById('btn');
+		btn.addEventListener('click',function(argument) {
+			let tv = text.value,
+			    rv = RegExpVaildate;
+			console.log(rv.qq(tv,true));
+		})
+
+		
+	</script>
+</body>
+</html>
