@@ -7,7 +7,7 @@ var simpleTips = {
 	tips : function(msg,time){
 		var simpleTips = document.createElement('div'),body = document.body;
 		simpleTips.setAttribute("id","simpleTips");
-		simpleTips.setAttribute('style','position:fixed;z-index:10000;top: 30%;width: 260px;left: 50%;margin-left: -60px;text-align: center; background-color: #484848;border-radius:4px;color: #ffffff;font-size: 18px;line-height:22px; word-break: break-all;font-family: "Microsoft Yahei",Arial, Verdana, Helvetica, sans-serif;');
+		simpleTips.setAttribute('style','position:fixed;z-index:10000;top: 30%;width: 260px;left: 50%;margin-left: -130px;text-align: center; background-color: #484848;border-radius:4px;color: #ffffff;font-size: 18px;line-height:22px; word-break: break-all;font-family: "Microsoft Yahei",Arial, Verdana, Helvetica, sans-serif;');
 		simpleTips.innerHTML = '<p style="margin: 10px;">'+msg+'</p>';
 		if (!/^[1-9][0-9]*$/.test(time)) {time = 3000;}
 		body.appendChild(simpleTips);
@@ -27,7 +27,7 @@ var simpleTips = {
 			cover = document.createElement('div'),
 		    title = title||"信息";
 		    simpleAlert.setAttribute("id","simpleTipsAlert");
-		simpleAlert.setAttribute('style','position: fixed;z-index: 10000;top: 30%;width: 300px;left: 50%;margin-left: -130px;height: auto;background-color: #FFFFFF;');
+		simpleAlert.setAttribute('style','position: fixed;z-index: 10000;top: 30%;width: 320px;left: 50%;margin-left: -160px;height: auto;background-color: #FFFFFF;');
 		simpleAlert.innerHTML  = 
 			'<div style="padding: 0 80px 0 20px;height:42px;line-height:42px;color: #333333;font-size: 14px; border-bottom:1px solid #EEE;background-color:#F8F8F8;text-align: left;">'+title+'</div>'+
 			'<div style="padding: 20px;font-size: 16px;">'+msg+'</div>'+
@@ -47,24 +47,53 @@ var simpleTips = {
 		}
 		function simpleAlertClose(fun){
 			if(typeof fun !== 'function'||!fun()){
-				simpleTips.closeAll();
+				simpleTips.closeAll('alert');
 			}
 		}
 	},
 	/*
 	@关闭所有弹窗，包括tips;
+	@type[string]可传如下值 "tips","alert","load”，表示关闭对应类型弹窗，不填或填写其他则全部关闭
 	*/
-	closeAll:function(){
+	closeAll:function(type){
 		var a = document.getElementById('simpleTipsAlert'),
 			s = document.getElementById('simpleTipsMask'),
 			t = document.getElementById('simpleTips'),
+			l = document.getElementById('simpleLoad'),
 			b = document.body;
-			if(a&&s){
+			if(type == "tips"&&t){
+				b.removeChild(t);
+			}else if(type == "alert"&&a&&s){
 				b.removeChild(a);
 				b.removeChild(s);
+			}else if(type == "load"&&l){
+				b.removeChild(l)
+			}else{
+				if(a&&s){b.removeChild(a);b.removeChild(s);}
+				if(t){b.removeChild(t);}
+				if(l){b.removeChild(l);}
 			}
-			if(t){
-				b.removeChild(t);
-			}
+	},
+	/*
+	@loading 
+	@msg[string]提示语
+	@time[number]等待关闭时间，不填或填写非数字，则需要手动关闭
+	 */
+	loading:function(msg,time){
+		var load = document.createElement('div');
+		var msg = msg||"加载中,请稍后";
+		load.setAttribute("id","simpleLoad");
+		load.setAttribute("style","position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;z-index: 10000;");
+		load.innerHTML = '<div style="position: absolute;top: 50%;left: 50%; -webkit-transform: translate(-50%,-50%);-moz-transform: translate(-50%,-50%);-ms-transform: translate(-50%,-50%);text-align: center; ">'
+						+'<img src="img/simple_loading.gif" alt="loading">'
+						+'<p style="color: #666666;">'+msg+'</p>'
+						+'</div>';
+		document.body.appendChild(load);
+		if(/^[1-9][0-9]*$/.test(time)){
+			setTimeout(function(){
+				document.body.removeChild(load);
+			},time);
+		}
+
 	}
 }

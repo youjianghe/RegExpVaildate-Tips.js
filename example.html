@@ -10,12 +10,11 @@
 	<input type="text" name="text" id="input" placeholder="身份证号码">
 	<button id="btn">提交</button>
 	<script>
-
 		let text = document.getElementById('input'),
 			btn = document.getElementById('btn');
 		btn.addEventListener('click',function(argument) {
 			var result = RegExpVaildate.idcard(text.value);
-			if(result.status == 0){
+			if(RegExpVaildate.idcard(text.value).status == 0){
 				simpleTips.alert(result.msg,"错误提示信息",function(){
 					//确定按钮
 					return true;//需要手动关闭
