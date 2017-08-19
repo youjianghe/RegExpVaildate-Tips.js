@@ -37,38 +37,37 @@ var RegExpVaildate = {
 	},
 	idcard:function(id) { //身份证号码校验
 	   // 1 "验证通过!", 0 //校验不通过
-		var rule ={
-			'format':/^[1-9]\d{16}[0-9X]$/,
-			'birthday':/^[1-2][0-9]{3}(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))$/  //没有判断大小月的情况
-		}
+		var format = /^(([1][1-5])|([2][1-3])|([3][1-7])|([4][1-6])|([5][0-4])|([6][1-5])|([7][1])|([8][1-2]))\d{4}(([1][9]\d{2})|([2]\d{3}))(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))\d{3}[0-9xX]$/;
 		//号码规则校验
-		if(!rule.format.test(id)){
-			return {'status':0,'msg':'格式错误:18位,X大写,不得有空格'};
-		}
-		//省份校验
-		var province_code = { 11: "北京", 12: "天津", 13: "河北", 14: "山西", 15: "内蒙古", 21: "辽宁", 22: "吉林", 23: "黑龙江", 31: "上海", 32: "江苏", 33: "浙江", 34: "安徽", 35: "福建", 36: "江西", 37: "山东", 41: "河南", 42: "湖北", 43: "湖南", 44: "广东", 45: "广西", 46: "海南", 50: "重庆", 51: "四川", 52: "贵州", 53: "云南", 54: "西藏", 61: "陕西", 62: "甘肃", 63: "青海", 64: "宁夏", 65: "新疆", 71: "台湾", 81: "香港", 82: "澳门", 91: "国外" };
-		if(!province_code[parseInt(id.substr(0,2))]){
-			return {'status':0,'msg':'省份代码错误'}
+		//500382198602100304
+		console.log(id);
+		if(!format.test(id)){
+			return {'status':0,'msg':'身份证号码不合规'};
 		}
 		//区位码校验
 		
-		//出生年月日校验
-		var now_year = parseInt((new Date()).getFullYear());
-		var year = parseInt(id.substr(6,4));
-		var birthday = id.substr(6,8);
-		if(!rule.birthday.test(birthday)||year<1800||year>now_year){
-			return {'status':0,'msg':'出生日期填写错误'}
+		//出生年月日校验   前正则限制起始年份为1900;
+		var year = id.substr(6,4),//身份证年
+		    month = id.substr(10,2),//身份证月
+		    date = id.substr(12,2),//身份证日
+		    time = Date.parse(month+'-'+date+'-'+year),//身份证日期时间戳date
+		    now_time = Date.parse(new Date()),//当前时间戳
+		    dates = (new Date(year,month,0)).getDate();//身份证当月天数
+			console.log(time+'s');
+		    console.log(now_time+'n');
+		if(time>now_time||date>dates){
+			return {'status':0,'msg':'出生日期不合规'}
 		}
 		//校验码判断
 		var c = new Array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2);   //系数
-    	var b = new Array(1,0,'X',9,8,7,6,5,4,3,2);  //校验码对照表
+    	var b = new Array('1','0','X','9','8','7','6','5','4','3','2');  //校验码对照表
 		var id_array = id.split("");
 		var sum = 0;
 		for(var k=0;k<17;k++){
 			sum+=parseInt(id_array[k])*parseInt(c[k]);
 		}
-		if(id_array[17] != b[sum%11]){
-			return {'status':0,'msg':'身份证校验错误'}
+		if(id_array[17].toUpperCase() != b[sum%11].toUpperCase()){
+			return {'status':0,'msg':'身份证校验码不合规'}
 		}
 		return {'status':1,'msg':'校验通过'}
 	}
