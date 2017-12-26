@@ -39,8 +39,6 @@ var RegExpVaildate = {
 	   // 1 "验证通过!", 0 //校验不通过
 		var format = /^(([1][1-5])|([2][1-3])|([3][1-7])|([4][1-6])|([5][0-4])|([6][1-5])|([7][1])|([8][1-2]))\d{4}(([1][9]\d{2})|([2]\d{3}))(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))\d{3}[0-9xX]$/;
 		//号码规则校验
-		//500382198602100304
-		console.log(id);
 		if(!format.test(id)){
 			return {'status':0,'msg':'身份证号码不合规'};
 		}
@@ -53,8 +51,6 @@ var RegExpVaildate = {
 		    time = Date.parse(month+'-'+date+'-'+year),//身份证日期时间戳date
 		    now_time = Date.parse(new Date()),//当前时间戳
 		    dates = (new Date(year,month,0)).getDate();//身份证当月天数
-			console.log(time+'s');
-		    console.log(now_time+'n');
 		if(time>now_time||date>dates){
 			return {'status':0,'msg':'出生日期不合规'}
 		}
